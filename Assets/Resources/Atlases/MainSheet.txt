@@ -1,0 +1,28 @@
+{"frames": {
+
+"circle.png":
+{
+	"frame": {"x":2,"y":216,"w":62,"h":62},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":1,"w":62,"h":62},
+	"sourceSize": {"w":64,"h":64}
+},
+"danaNormal.psd":
+{
+	"frame": {"x":2,"y":2,"w":212,"h":220},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":19,"y":18,"w":212,"h":220},
+	"sourceSize": {"w":250,"h":250}
+}},
+"meta": {
+	"app": "http://www.texturepacker.com",
+	"version": "1.0",
+	"image": "MainSheet.png",
+	"format": "RGBA8888",
+	"size": {"w":256,"h":512},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:d2555f2870e7291c61ec9819bc28d547$"
+}
+}

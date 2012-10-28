@@ -1,0 +1,20 @@
+{"frames": {
+
+"whiteSquare.png":
+{
+	"frame": {"x":3,"y":3,"w":30,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":30,"h":30},
+	"sourceSize": {"w":30,"h":30}
+}},
+"meta": {
+	"app": "http://www.texturepacker.com",
+	"version": "1.0",
+	"image": "ExtrudersSheet.png",
+	"format": "RGBA8888",
+	"size": {"w":64,"h":64},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:1986d96db6184ee5d41afeaf92145536$"
+}
+}
