@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class WTEntity : FContainer {
 	private FSprite sprite_;
+	public WTFallingBlockComponent fallingBlockComponent;
 	
 	public float xVelocity = 0;
 	public float yVelocity = 0;
@@ -10,7 +12,12 @@ public class WTEntity : FContainer {
 	public float xPrevious = 0;
 	public float yPrevious = 0;
 	
-	public WTEntity(string imageName) {
+	public WTEntity(string imageName, WTFallingBlockComponent fallingBlockComponent) {
+		if (fallingBlockComponent != null) {
+			this.fallingBlockComponent = fallingBlockComponent;
+			fallingBlockComponent.owner = this;
+		}
+		
 		sprite_ = new FSprite(imageName);
 		AddChild(sprite_);
 	}
@@ -30,17 +37,22 @@ public class WTEntity : FContainer {
 		Vector2 localOrigin = localNode.GlobalToLocal(globalOrigin);
 		return new Rect(localOrigin.x, localOrigin.y, sprite_.width, sprite_.height);
 	}
+}
+
+public class WTFallingBlockComponent {
+	public bool isBeingUsed = false;
+	public WTEntity owner;
 	
-	/*public Rect GetGlobalSpriteRectIfItsYOri() {
-		Vector2 globalOrigin = sprite_.LocalToGlobal(new Vector2(sprite_.x, sprite_.y));
-		Vector2 previousGlobalOrigin = new Vector2(globalOrigin.x - (x - xPrevious), globalOrigin.y - (y - yPrevious));
-		return new Rect(previousGlobalOrigin.x, previousGlobalOrigin.y, sprite_.width, sprite_.height);
+	public WTFallingBlockComponent() {
+		
 	}
+}
+
+public class WTEntityConstruct : List<WTEntity> {
+	public List<WTEntity> entities;
 	
-	public Rect GetLocalSpritePreviousRect(FNode localNode) {
-		Rect previousGlobalRect = GetGlobalSpritePreviousRect();
-		Vector2 previousGlobalOrigin = new Vector2(previousGlobalRect.xMin, previousGlobalRect.yMin);
-		Vector2 previousLocalOrigin = localNode.GlobalToLocal(previousGlobalOrigin);
-		return new Rect(previousLocalOrigin.x, previousLocalOrigin.y, sprite_.width, sprite_.height);
-	}*/
+	public WTEntityConstruct(List<WTEntity> entities) {
+		if (entities == null) this.entities = new List<WTEntity>();
+		else this.entities = entities;
+	}
 }

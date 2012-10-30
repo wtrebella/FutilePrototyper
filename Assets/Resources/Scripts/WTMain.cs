@@ -4,6 +4,7 @@ using System.Collections;
 public class WTMain : MonoBehaviour {
 
 	public static FStage currentScene;
+	public static WTMain instance;
 	
 	public enum SceneType {
 		None,
@@ -11,6 +12,8 @@ public class WTMain : MonoBehaviour {
 	}
 	
 	void Start () {
+		if (instance == null) instance = this;
+		
 		FutileParams fp = new FutileParams(false, false, true, true);
 		fp.AddResolutionLevel(640f, 1.0f, 1.0f, "");
 		fp.origin = Vector2.zero;
@@ -19,6 +22,7 @@ public class WTMain : MonoBehaviour {
 		
 		Futile.atlasManager.LoadAtlas("Atlases/ExtrudersSheet");
 		Futile.atlasManager.LoadAtlas("Atlases/MainSheet");
+		Futile.atlasManager.LoadFont("SoftSugar", "SoftSugar.png", "Atlases/SoftSugar");
 		
 		SwitchToScene(SceneType.FalldownTest);
 	}
