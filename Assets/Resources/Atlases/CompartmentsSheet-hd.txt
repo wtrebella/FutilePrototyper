@@ -1,0 +1,68 @@
+{"frames": {
+
+"background.png":
+{
+	"frame": {"x":2,"y":2,"w":640,"h":1146},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":640,"h":1146},
+	"sourceSize": {"w":640,"h":1146}
+},
+"compartment0.png":
+{
+	"frame": {"x":516,"y":1150,"w":500,"h":520},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":602,"w":500,"h":520},
+	"sourceSize": {"w":640,"h":1146}
+},
+"compartment1.png":
+{
+	"frame": {"x":1018,"y":2,"w":386,"h":500},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":230,"y":609,"w":386,"h":500},
+	"sourceSize": {"w":640,"h":1146}
+},
+"compartment2.png":
+{
+	"frame": {"x":2,"y":1150,"w":576,"h":512},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":24,"y":287,"w":576,"h":512},
+	"sourceSize": {"w":640,"h":1146}
+},
+"compartment3.png":
+{
+	"frame": {"x":2,"y":1728,"w":272,"h":456},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":343,"y":298,"w":272,"h":456},
+	"sourceSize": {"w":640,"h":1146}
+},
+"compartment4.png":
+{
+	"frame": {"x":1520,"y":2,"w":450,"h":386},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":166,"y":21,"w":450,"h":386},
+	"sourceSize": {"w":640,"h":1146}
+},
+"compartment5.png":
+{
+	"frame": {"x":516,"y":1672,"w":324,"h":426},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":13,"y":20,"w":324,"h":426},
+	"sourceSize": {"w":640,"h":1146}
+}},
+"meta": {
+	"app": "http://www.texturepacker.com",
+	"version": "1.0",
+	"image": "CompartmentsSheet-hd.png",
+	"format": "RGBA8888",
+	"size": {"w":2048,"h":2048},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:d2942f730b919c3643c29896d8d57b8f$"
+}
+}
