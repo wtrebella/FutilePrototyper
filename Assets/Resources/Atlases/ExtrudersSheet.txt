@@ -1,8 +1,16 @@
 {"frames": {
 
+"diagBar.png":
+{
+	"frame": {"x":3,"y":3,"w":500,"h":500},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":500,"h":500},
+	"sourceSize": {"w":500,"h":500}
+},
 "whiteSquare.png":
 {
-	"frame": {"x":3,"y":3,"w":30,"h":30},
+	"frame": {"x":3,"y":507,"w":30,"h":30},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":30,"h":30},
@@ -13,8 +21,8 @@
 	"version": "1.0",
 	"image": "ExtrudersSheet.png",
 	"format": "RGBA8888",
-	"size": {"w":64,"h":64},
+	"size": {"w":512,"h":1024},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:1986d96db6184ee5d41afeaf92145536$"
+	"smartupdate": "$TexturePacker:SmartUpdate:65c82f5dd0956266c0466666320c2f10$"
 }
 }

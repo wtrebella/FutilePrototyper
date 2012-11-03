@@ -96,7 +96,10 @@ public class FAtlas
 		 
 		if(!_texture)
 		{
-			Debug.Log ("Futile: Couldn't load the atlas texture from: " + _imagePath);	
+			Debug.Log("Futile: Couldn't load atlas at resolution level. Trying without suffix.");
+			_imagePath = _imagePath.TrimEnd(Futile.resourceSuffix.ToCharArray());
+			_texture = (Texture) Resources.Load (_imagePath, typeof(Texture));
+			if (!_texture) Debug.Log ("Futile: Couldn't load the atlas texture from: " + _imagePath);
 		}
 		
 		_textureSize = new Vector2(_texture.width,_texture.height);
@@ -105,10 +108,13 @@ public class FAtlas
 	private void LoadAtlasData()
 	{
 		TextAsset dataAsset = (TextAsset) Resources.Load (_dataPath, typeof(TextAsset));
-		
+				
 		if(!dataAsset)
 		{
-			Debug.Log ("Futile: Couldn't load the atlas data from: " + _dataPath);
+			Debug.Log("Futile: Couldn't load atlas data at resolution level. Trying without suffix.");
+			_dataPath = _dataPath.TrimEnd(Futile.resourceSuffix.ToCharArray());
+			dataAsset = (TextAsset) Resources.Load (_dataPath, typeof(TextAsset));
+			if (!dataAsset) Debug.Log ("Futile: Couldn't load the atlas data from: " + _dataPath);
 		}
 		
 		Dictionary<string,object> dict = dataAsset.text.dictionaryFromJson();

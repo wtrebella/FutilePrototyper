@@ -9,8 +9,6 @@ public class Futile : MonoBehaviour
 {
 	static public Futile instance = null;
 	
-	
-	
 	static public FScreen screen;
 	
 	static public FAtlasManager atlasManager;
