@@ -2,23 +2,31 @@
 
 "SoftSugar.png":
 {
-	"frame": {"x":2,"y":2,"w":508,"h":272},
-	"rotated": false,
+	"frame": {"x":2,"y":1120,"w":508,"h":272},
+	"rotated": true,
 	"trimmed": true,
 	"spriteSourceSize": {"x":2,"y":1,"w":508,"h":272},
 	"sourceSize": {"w":512,"h":512}
 },
 "circle.png":
 {
-	"frame": {"x":2,"y":276,"w":62,"h":62},
+	"frame": {"x":813,"y":2,"w":62,"h":62},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":1,"y":1,"w":62,"h":62},
 	"sourceSize": {"w":64,"h":64}
 },
+"nursesPass.psd":
+{
+	"frame": {"x":2,"y":2,"w":809,"h":1116},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":809,"h":1116},
+	"sourceSize": {"w":809,"h":1116}
+},
 "square.psd":
 {
-	"frame": {"x":2,"y":340,"w":50,"h":50},
+	"frame": {"x":877,"y":2,"w":50,"h":50},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
@@ -29,8 +37,8 @@
 	"version": "1.0",
 	"image": "MainSheet.png",
 	"format": "RGBA8888",
-	"size": {"w":512,"h":512},
+	"size": {"w":1024,"h":2048},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:9ec84122a1e29c9e75f554f89457406b$"
+	"smartupdate": "$TexturePacker:SmartUpdate:7b283813c564cc33cbb93ed7abeb8071$"
 }
 }

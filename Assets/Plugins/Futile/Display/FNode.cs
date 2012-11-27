@@ -118,9 +118,7 @@ public class FNode
 	public void UpdateMatrix()
 	{
 		if(!_isMatrixDirty) return;
-		
-		_isMatrixDirty = false;
-		
+				
 		_matrix.SetScaleThenRotate(_x,_y,_scaleX,_scaleY,_rotation * -RXMath.DTOR);
 			
 		if(_container != null)

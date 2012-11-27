@@ -33,12 +33,13 @@ public class WTCompartments : FStage, FSingleTouchableInterface {
 	}
 	
 	public bool HandleSingleTouchBegan(FTouch touch) {
-		Debug.Log(touch.position);
 		foreach (FSprite sprite in compartmentSprites) {
-			if (sprite.textureRect.Contains(sprite.GlobalToLocal(touch.position))) {
+			/*if (sprite.textureRect.Contains(sprite.GlobalToLocal(touch.position))) {
 				if (sprite.color == Color.blue) sprite.color = Color.red;
 				else sprite.color = Color.blue;
-			}
+			}*/
+			Debug.Log(sprite.textureRect);	
+			//Debug.Log(sprite.element.atlas.texture.GetPixel((int)touch.position.x, (int)touch.position.y));
 		}
 		
 		return true;
