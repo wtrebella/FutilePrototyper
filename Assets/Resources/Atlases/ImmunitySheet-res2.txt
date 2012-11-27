@@ -1,0 +1,84 @@
+{"frames": {
+
+"body.png":
+{
+	"frame": {"x":2,"y":2,"w":519,"h":1335},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":20,"w":519,"h":1335},
+	"sourceSize": {"w":565,"h":1367}
+},
+"brain.png":
+{
+	"frame": {"x":901,"y":82,"w":96,"h":84},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":11,"y":8,"w":96,"h":84},
+	"sourceSize": {"w":120,"h":102}
+},
+"circle.psd":
+{
+	"frame": {"x":718,"y":148,"w":170,"h":170},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":15,"w":170,"h":170},
+	"sourceSize": {"w":200,"h":200}
+},
+"heart.png":
+{
+	"frame": {"x":901,"y":2,"w":78,"h":99},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":2,"w":78,"h":99},
+	"sourceSize": {"w":84,"h":101}
+},
+"intestines.png":
+{
+	"frame": {"x":523,"y":2,"w":193,"h":162},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":2,"w":193,"h":162},
+	"sourceSize": {"w":195,"h":166}
+},
+"liver.png":
+{
+	"frame": {"x":523,"y":166,"w":161,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":0,"w":161,"h":66},
+	"sourceSize": {"w":163,"h":68}
+},
+"lungLeft.png":
+{
+	"frame": {"x":718,"y":2,"w":83,"h":181},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":1,"w":83,"h":181},
+	"sourceSize": {"w":85,"h":183}
+},
+"lungRight.png":
+{
+	"frame": {"x":718,"y":87,"w":59,"h":179},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":1,"w":59,"h":179},
+	"sourceSize": {"w":63,"h":181}
+},
+"stomach.png":
+{
+	"frame": {"x":890,"y":168,"w":127,"h":70},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":127,"h":70},
+	"sourceSize": {"w":127,"h":70}
+}},
+"meta": {
+	"app": "http://www.texturepacker.com",
+	"version": "1.0",
+	"image": "ImmunitySheet-res2.png",
+	"format": "RGBA8888",
+	"size": {"w":1024,"h":2048},
+	"scale": "0.5",
+	"smartupdate": "$TexturePacker:SmartUpdate:15c577bc0e3392e36cb9aada4a5879f7$"
+}
+}
