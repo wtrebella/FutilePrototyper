@@ -10,7 +10,6 @@ public class WTMain : MonoBehaviour {
 		None,
 		FalldownTest, // this doesn't work right at all
 		Compartments,
-		Immunity,
 		BlahGame
 	}
 	
@@ -29,12 +28,11 @@ public class WTMain : MonoBehaviour {
 		Futile.atlasManager.LoadAtlas("Atlases/ExtrudersSheet");
 		Futile.atlasManager.LoadAtlas("Atlases/MainSheet");
 		Futile.atlasManager.LoadAtlas("Atlases/CompartmentsSheet");
-		Futile.atlasManager.LoadAtlas("Atlases/ImmunitySheet");
 		Futile.atlasManager.LoadFont("SoftSugar", "SoftSugar.png", "Atlases/SoftSugar");
 		
 		Go.defaultEaseType = EaseType.SineInOut;
 		
-		SwitchToScene(SceneType.Immunity);
+		SwitchToScene(SceneType.Compartments);
 	}
 	
 	public void SwitchToScene(SceneType sceneType) {
@@ -42,7 +40,6 @@ public class WTMain : MonoBehaviour {
 		
 		if (sceneType == SceneType.FalldownTest) currentScene = new WTFalldownTest();
 		if (sceneType == SceneType.Compartments) currentScene = new WTCompartments();
-		if (sceneType == SceneType.Immunity) currentScene = new WTImmunity();
 		if (sceneType == SceneType.BlahGame) currentScene = new WTBlahGame();
 		if (sceneType == SceneType.None) currentScene = null;
 		
