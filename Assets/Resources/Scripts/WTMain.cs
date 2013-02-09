@@ -10,6 +10,7 @@ public class WTMain : MonoBehaviour {
 		None,
 		FalldownTest, // this doesn't work right at all
 		Compartments,
+		FrendenGame,
 		BlahGame
 	}
 	
@@ -17,9 +18,8 @@ public class WTMain : MonoBehaviour {
 		if (instance == null) instance = this;
 		
 		FutileParams fp = new FutileParams(true, true, false, false);
-		fp.AddResolutionLevel(480f, 1.0f, 1.0f, "-res1");
-		fp.AddResolutionLevel(1136f, 2.0f, 2.0f, "-res2");
-		fp.AddResolutionLevel(2048f, 4.0f, 4.0f, "-res4");
+		fp.AddResolutionLevel(480f, 1.0f, 1.0f, "");
+
 		fp.backgroundColor = Color.white;
 		fp.origin = Vector2.zero;
 		
@@ -28,11 +28,11 @@ public class WTMain : MonoBehaviour {
 		Futile.atlasManager.LoadAtlas("Atlases/ExtrudersSheet");
 		Futile.atlasManager.LoadAtlas("Atlases/MainSheet");
 		Futile.atlasManager.LoadAtlas("Atlases/CompartmentsSheet");
-		Futile.atlasManager.LoadFont("SoftSugar", "SoftSugar.png", "Atlases/SoftSugar");
+		//Futile.atlasManager.LoadFont("SoftSugar", "SoftSugar.png", "Atlases/MainSheet", 0, 0);
 		
 		Go.defaultEaseType = EaseType.SineInOut;
 		
-		SwitchToScene(SceneType.Compartments);
+		SwitchToScene(SceneType.FrendenGame);
 	}
 	
 	public void SwitchToScene(SceneType sceneType) {
@@ -41,6 +41,7 @@ public class WTMain : MonoBehaviour {
 		if (sceneType == SceneType.FalldownTest) currentScene = new WTFalldownTest();
 		if (sceneType == SceneType.Compartments) currentScene = new WTCompartments();
 		if (sceneType == SceneType.BlahGame) currentScene = new WTBlahGame();
+		if (sceneType == SceneType.FrendenGame) currentScene = new WTFrendenGame();
 		if (sceneType == SceneType.None) currentScene = null;
 		
 		if (currentScene != null) Futile.AddStage(currentScene);

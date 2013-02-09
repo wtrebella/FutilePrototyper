@@ -1,0 +1,19 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Resources/Scripts/WTFrendenGame.cs">
+    <Files>
+      <File FileName="Assets/Plugins/Futile/Core/FAtlas.cs" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/Futile/Core/FAtlasManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/Futile/Futile.cs" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/Futile/Core/FFacetRenderLayer.cs" Line="73" Column="1" />
+      <File FileName="Assets/Resources/Scripts/WTMain.cs" Line="1" Column="1" />
+      <File FileName="Assets/Resources/Scripts/WTFrendenGame.cs" Line="7" Column="38" />
+      <File FileName="Assets/Resources/Scripts/WTDiagBarsLayer.cs" Line="1" Column="1" />
+      <File FileName="Assets/Resources/Scripts/WTBlahGame.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

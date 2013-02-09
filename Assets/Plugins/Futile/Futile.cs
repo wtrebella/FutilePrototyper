@@ -9,6 +9,8 @@ public class Futile : MonoBehaviour
 {
 	static public Futile instance = null;
 	
+	
+	
 	static public FScreen screen;
 	
 	static public FAtlasManager atlasManager;
@@ -21,7 +23,9 @@ public class Futile : MonoBehaviour
 	
 	static public bool isOpenGL; //assigned in Awake
 	
+	static public int baseRenderQueueDepth = 3000;
 	
+	static public bool shouldRemoveAtlasElementFileExtensions = true;
 	
 	
 	//These are set in FScreen
@@ -33,12 +37,9 @@ public class Futile : MonoBehaviour
 	
 	static public string resourceSuffix; //set based on the resLevel
 	
-	
-	
-	//used by the rendering engine
-	static internal int startingQuadsPerLayer;
-	static internal int quadsPerLayerExpansion;
-	static internal int maxEmptyQuadsPerLayer;	
+	//default element, a 16x16 white texture
+	static public FAtlasElement whiteElement;
+	static public Color white = Color.white; //unlike Futile.white, it doesn't create a new color every time
 	
 	static internal int nextRenderLayerDepth = 0;
 	
@@ -46,11 +47,11 @@ public class Futile : MonoBehaviour
 	static private List<FStage> _stages;
 	static private bool _isDepthChangeNeeded = false;
 	
+	public delegate void FutileUpdateDelegate();
 	
-	public event Action SignalUpdate;
-	public event Action SignalLateUpdate;
-	
-	
+	public event FutileUpdateDelegate SignalUpdate;
+	public event FutileUpdateDelegate SignalFixedUpdate;
+	public event FutileUpdateDelegate SignalLateUpdate;
 	
 	
 	private GameObject _cameraHolder;
@@ -58,6 +59,9 @@ public class Futile : MonoBehaviour
 	
 
 	private FutileParams _futileParams;
+	
+	public bool shouldRunGCNextUpdate = false;
+	
 	
 	
 	
@@ -79,10 +83,7 @@ public class Futile : MonoBehaviour
 		Application.targetFrameRate = _futileParams.targetFrameRate;
 		
 		FShader.Init(); //set up the basic shaders
-		
-		Futile.startingQuadsPerLayer = _futileParams.startingQuadsPerLayer;
-		Futile.quadsPerLayerExpansion = _futileParams.quadsPerLayerExpansion;
-		Futile.maxEmptyQuadsPerLayer = _futileParams.maxEmptyQuadsPerLayer;
+		FFacetType.Init(); //set up the types of facets (Quads, Triangles, etc)
 		
 		screen = new FScreen(_futileParams);
 		
@@ -94,6 +95,7 @@ public class Futile : MonoBehaviour
 		_cameraHolder.transform.parent = gameObject.transform;
 		
 		_camera = _cameraHolder.AddComponent<Camera>();
+		_camera.tag = "MainCamera";
 		_camera.name = "Camera";
 		//_camera.clearFlags = CameraClearFlags.Depth; //TODO: check if this is faster or not?
 		_camera.clearFlags = CameraClearFlags.SolidColor;
@@ -113,11 +115,48 @@ public class Futile : MonoBehaviour
 		
 		atlasManager = new FAtlasManager();
 		
+		CreateDefaultAtlases();
+		
+		
 		_stages = new List<FStage>();
 		
 		stage = new FStage("Futile.stage");
 		
 		AddStage (stage);
+	}
+
+	public void CreateDefaultAtlases()
+	{
+		//atlas of plain white
+		
+		Texture2D plainWhiteTex = new Texture2D(16,16);
+		plainWhiteTex.filterMode = FilterMode.Bilinear;
+		plainWhiteTex.wrapMode = TextureWrapMode.Clamp;
+		
+		Color white = Futile.white;
+		//Color clear = new Color(1,1,1,0);
+		
+		for(int r = 0; r<16; r++)
+		{
+			for(int c = 0; c<16; c++)
+			{
+//				if(c == 0 || r  == 0) //clear the 0 edges
+//				{
+//					plainWhiteTex.SetPixel(c,r,clear);
+//				}
+//				else 
+//				{
+					plainWhiteTex.SetPixel(c,r,white);
+//				}
+			}
+		}
+		
+		
+		plainWhiteTex.Apply();
+		
+		atlasManager.LoadAtlasFromTexture("Futile_White",plainWhiteTex);
+		
+		whiteElement = atlasManager.GetElementWithName("Futile_White");
 	}
 	
 	static public void AddStage(FStage stageToAdd)
@@ -208,10 +247,10 @@ public class Futile : MonoBehaviour
 	private void Update()
 	{
 		screen.Update();
-
-		touchManager.Update();
+		
 		if(SignalUpdate != null) SignalUpdate();
 		
+		touchManager.Update();
 		
 		for(int s = 0; s<_stages.Count; s++)
 		{
@@ -219,6 +258,12 @@ public class Futile : MonoBehaviour
 		}
 		
 		_isDepthChangeNeeded = false;
+		
+		if(shouldRunGCNextUpdate)
+		{
+			shouldRunGCNextUpdate = false;	
+			GC.Collect();
+		}
 	}
 	
 	private void LateUpdate()
@@ -232,6 +277,11 @@ public class Futile : MonoBehaviour
 		
 		if(SignalLateUpdate != null) SignalLateUpdate();
 	}	
+	
+	private void FixedUpdate()
+	{
+		if(SignalFixedUpdate != null) SignalFixedUpdate();
+	}
 	
 	private void OnApplicationQuit()
 	{

@@ -23,7 +23,7 @@ public interface FSingleTouchableInterface
 
 	void HandleSingleTouchCanceled(FTouch touch);
 	
-	int touchPriority
+	int touchPriority //FNodes have this defined by default
 	{
 		get;	
 	}
@@ -59,6 +59,7 @@ public class FTouchManager
 		Input.multiTouchEnabled = true;
 	
 		//this just makes sure mouse emulation is off on iOS and Android
+		//this may eventually cause problems on devices that support both mouse and touch
 		
 		#if UNITY_ANDROID
 			shouldMouseEmulateTouch = false;
@@ -162,11 +163,22 @@ public class FTouchManager
 		
 		int singleTouchableCount = _singleTouchables.Count;
 		
+		int lowestFingerId = int.MaxValue;
+			
+		for(int t = 0; t<touchCount; t++)
+		{
+			FTouch touch = touches[t];
+			if(touch.fingerId < lowestFingerId)
+			{
+				lowestFingerId = touch.fingerId;	
+			}
+		}
+		
 		for(int t = 0; t<touchCount; t++)
 		{
 			FTouch touch = touches[t];
 			
-			if(touch.fingerId == 0) // we only care about the first touch for the singleTouchables
+			if(touch.fingerId == lowestFingerId) // we only care about the first touch for the singleTouchables
 			{
 				if(touch.phase == TouchPhase.Began)
 				{
@@ -259,6 +271,7 @@ public class FTouchManager
 
 	private void UpdatePrioritySorting()
 	{
+		_needsPrioritySort = false;
 		_singleTouchables.Sort(PriorityComparison);
 	}
 	
@@ -280,7 +293,7 @@ public class FTouchManager
 				_singleTouchables.Add(touchable);
 			}
 		}
-		
+		_needsPrioritySort = true;
 	}
 	
 	public void AddMultiTouchTarget(FMultiTouchableInterface touchable)

@@ -5,27 +5,31 @@ using System.Collections.Generic;
 
 //parts of this were inspired by https://github.com/prime31/UIToolkit/blob/master/Assets/Plugins/UIToolkit/UIElements/UIText.cs
 
-public class FLabel : FQuadNode
+public class FLabel : FFacetNode
 {
+	public static float defaultAnchorX = 0.5f;
+	public static float defaultAnchorY = 0.5f;
+	
 	protected FFont _font;
 	protected string _fontName;
 	protected string _text;
 	
-	protected Color _color = Color.white;
-	protected Color _alphaColor = Color.white;
+	protected Color _color = Futile.white;
+	protected Color _alphaColor = Futile.white;
 	
 	protected FLetterQuadLine[] _letterQuadLines;
 	
 	protected bool _isMeshDirty = false;
 	
-	protected float _anchorX = 0.5f;
-	protected float _anchorY = 0.5f;
+	protected float _anchorX = defaultAnchorX;
+	protected float _anchorY = defaultAnchorY;
 	
 	protected float _lineHeightDelta;
 	protected float _letterSpacingDelta;
 	
 	protected bool _doesTextNeedUpdate = false;
 	protected bool _doesLocalPositionNeedUpdate = false;
+	protected bool _doQuadsNeedUpdate = false;
 	
 	protected Rect _textRect;
 	
@@ -42,34 +46,46 @@ public class FLabel : FQuadNode
 		_font = Futile.atlasManager.GetFontWithName(_fontName);
 		_textParams = textParams;
 		 
-		Init(_font.element, 0);
+		Init(FFacetType.Quad, _font.element, 0);
 		
 		CreateTextQuads();
+	}
+	
+	override public void HandleAddedToStage()
+	{
+		Futile.instance.SignalUpdate += HandleUpdate;
+		base.HandleAddedToStage();
+	}
+	
+	override public void HandleRemovedFromStage()
+	{
+		Futile.instance.SignalUpdate -= HandleUpdate;
+		base.HandleRemovedFromStage();
 	}
 	
 	public void CreateTextQuads()
 	{
 		_doesTextNeedUpdate = false;
 		
-		int oldQuadsNeeded = _numberOfQuadsNeeded;
+		int oldFacetsNeeded = _numberOfFacetsNeeded;
 		
 		_letterQuadLines = _font.GetQuadInfoForText(_text,_textParams);
 		
-		_numberOfQuadsNeeded = 0;
+		_numberOfFacetsNeeded = 0;
 		
 		int lineCount = _letterQuadLines.Length;
 		for(int i = 0; i< lineCount; i++)
 		{
-			_numberOfQuadsNeeded += _letterQuadLines[i].quads.Length;
+			_numberOfFacetsNeeded += _letterQuadLines[i].quads.Length;
 		}
 		
 		if(_isOnStage)
 		{
-			int delta = _numberOfQuadsNeeded - oldQuadsNeeded;
+			int delta = _numberOfFacetsNeeded - oldFacetsNeeded;
 			
 			if(delta != 0) //if the number of letter quads has changed, tell the stage
 			{
-				_stage.HandleQuadsChanged();
+				_stage.HandleFacetsChanged();
 			}
 		}
 		
@@ -107,7 +123,9 @@ public class FLabel : FQuadNode
 			int quadCount = line.quads.Length;
 			for(int q = 0; q< quadCount; q++)
 			{
-				line.quads[q].CalculateVectors(offsetX, offsetY);
+				//todo: figure out where this magic 1.0f comes from
+				//it's needed for everything to be perfectly positioned, but I'm not sure why...
+				line.quads[q].CalculateVectors(offsetX+_font.offsetX+1.0f, offsetY+_font.offsetY+1.0f);
 			}
 		}
 		
@@ -118,6 +136,14 @@ public class FLabel : FQuadNode
 		
 		_isMeshDirty = true; 
 	}
+	
+	private void HandleUpdate()
+	{
+		if(_doesTextNeedUpdate)
+		{
+			CreateTextQuads();
+		}		
+	}
 
 	override public void Redraw(bool shouldForceDirty, bool shouldUpdateDepth)
 	{
@@ -126,14 +152,9 @@ public class FLabel : FQuadNode
 		
 		UpdateDepthMatrixAlpha(shouldForceDirty, shouldUpdateDepth);
 		
-		if(_doesTextNeedUpdate)
-		{
-			CreateTextQuads();
-		}
-		
 		if(shouldUpdateDepth)
 		{
-			UpdateQuads();
+			UpdateFacets();
 		}
 		
 		if(wasMatrixDirty || shouldForceDirty || shouldUpdateDepth)
@@ -160,7 +181,7 @@ public class FLabel : FQuadNode
 	
 	override public void PopulateRenderLayer()
 	{
-		if(_isOnStage && _firstQuadIndex != -1)
+		if(_isOnStage && _firstFacetIndex != -1)
 		{
 			_isMeshDirty = false;
 			
@@ -168,7 +189,7 @@ public class FLabel : FQuadNode
 			Vector2[] uvs = _renderLayer.uvs;
 			Color[] colors = _renderLayer.colors;
 			
-			int vertexIndex0 = _firstQuadIndex*4;
+			int vertexIndex0 = _firstFacetIndex*4;
 			int vertexIndex1 = vertexIndex0 + 1;
 			int vertexIndex2 = vertexIndex0 + 2;
 			int vertexIndex3 = vertexIndex0 + 3;
@@ -178,7 +199,9 @@ public class FLabel : FQuadNode
 			{
 				FLetterQuad[] quads = _letterQuadLines[i].quads;
 				
+				
 				int quadCount = quads.Length;
+				
 				for(int q = 0; q<quadCount; q++)
 				{
 					FLetterQuad quad = quads[q];
@@ -297,6 +320,24 @@ public class FLabel : FQuadNode
 	public Rect boundsRect
 	{
 		get {throw new NotSupportedException("boundsRect is obsolete! Use textRect instead");}
+	}
+	
+	//for convenience
+	public void SetAnchor(float newX, float newY)
+	{
+		this.anchorX = newX;
+		this.anchorY = newY;
+	}
+	
+	public void SetAnchor(Vector2 newAnchor)
+	{
+		this.anchorX = newAnchor.x;
+		this.anchorY = newAnchor.y;
+	}
+	
+	public Vector2 GetAnchor()
+	{
+		return new Vector2(_anchorX,_anchorY);	
 	}
 	
 	

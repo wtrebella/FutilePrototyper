@@ -61,20 +61,38 @@ public class FNode
 		_matrix = new FMatrix();
 		_concatenatedMatrix = new FMatrix();
 		_isMatrixDirty = false;
-		
 	}
 	
-	public Vector2 ScreenToLocal(Vector2 screenVector) //for transforming mouse or touch directly
+	public Vector2 LocalToScreen(Vector2 localVector) //for sending local points back to screen coords
 	{
 		UpdateMatrix();
-		
-		float touchScale = 1.0f/Futile.displayScale;
 		
 		//the offsets account for the camera's 0,0 point (eg, center, bottom left, etc.)
 		float offsetX = -Futile.screen.originX * Futile.screen.pixelWidth;
 		float offsetY = -Futile.screen.originY * Futile.screen.pixelHeight;
 		
-		screenVector = new Vector2((screenVector.x+offsetX)*touchScale, (screenVector.y+offsetY)*touchScale);
+		localVector = this.screenConcatenatedMatrix.GetNewTransformedVector(localVector);
+		
+		return new Vector2
+		(
+			(localVector.x/Futile.displayScaleInverse) - offsetX, 
+			(localVector.y/Futile.displayScaleInverse) - offsetY
+		);
+	}
+	
+	public Vector2 ScreenToLocal(Vector2 screenVector) //for transforming mouse or touch points to local coords
+	{
+		UpdateMatrix();
+		
+		//the offsets account for the camera's 0,0 point (eg, center, bottom left, etc.)
+		float offsetX = -Futile.screen.originX * Futile.screen.pixelWidth;
+		float offsetY = -Futile.screen.originY * Futile.screen.pixelHeight;
+		
+		screenVector = new Vector2
+		(
+			(screenVector.x+offsetX)*Futile.displayScaleInverse, 
+			(screenVector.y+offsetY)*Futile.displayScaleInverse
+		);
 		
 		return this.screenInverseConcatenatedMatrix.GetNewTransformedVector(screenVector);
 	}
@@ -82,14 +100,12 @@ public class FNode
 	public Vector2 LocalToStage(Vector2 localVector)
 	{
 		UpdateMatrix();
-		
 		return _concatenatedMatrix.GetNewTransformedVector(localVector);
 	}
 	
 	public Vector2 StageToLocal(Vector2 globalVector) 
 	{
 		UpdateMatrix();
-		
 		//using "this" so the getter is called (because it checks if the matrix exists and lazy inits it if it doesn't)
 		return this.inverseConcatenatedMatrix.GetNewTransformedVector(globalVector);
 	}
@@ -97,7 +113,6 @@ public class FNode
 	public Vector2 LocalToGlobal(Vector2 localVector)
 	{
 		UpdateMatrix();
-		
 		//using "this" so the getter is called (because it checks if the matrix exists and lazy inits it if it doesn't)
 		return this.screenConcatenatedMatrix.GetNewTransformedVector(localVector);
 	}
@@ -105,7 +120,6 @@ public class FNode
 	public Vector2 GlobalToLocal(Vector2 globalVector)
 	{
 		UpdateMatrix();
-		
 		//using "this" so the getter is called (because it checks if the matrix exists and lazy inits it if it doesn't)
 		return this.screenInverseConcatenatedMatrix.GetNewTransformedVector(globalVector);
 	}
@@ -115,10 +129,17 @@ public class FNode
 		return GlobalToLocal(otherNode.LocalToGlobal(otherVector));
 	}
 	
+	public Vector2 GetLocalMousePosition()
+	{
+		return ScreenToLocal(Input.mousePosition);	
+	}
+	
 	public void UpdateMatrix()
 	{
 		if(!_isMatrixDirty) return;
-				
+		
+		//do NOT set _isMatrixDirty to false here because it is used in the redraw loop and will be set false then
+		
 		_matrix.SetScaleThenRotate(_x,_y,_scaleX,_scaleY,_rotation * -RXMath.DTOR);
 			
 		if(_container != null)
@@ -385,5 +406,73 @@ public class FNode
 		set {_stage = value;}
 	}
 	
-}
+	
+	//use node.LocalToLocal to use a point from a different coordinate space
+	public void RotateAroundPointRelative(Vector2 localPoint, float relativeDegrees)
+	{
+		FMatrix tempMatrix = FMatrix.tempMatrix;
+		
+		tempMatrix.ResetToIdentity();
+		tempMatrix.SetScaleThenRotate(0,0,_scaleX,_scaleY,_rotation * -RXMath.DTOR);
+		Vector2 firstVector = tempMatrix.GetNewTransformedVector(new Vector2(-localPoint.x,-localPoint.y));
+		
+		_rotation += relativeDegrees;
+		
+		tempMatrix.ResetToIdentity();
+		tempMatrix.SetScaleThenRotate(0,0,_scaleX,_scaleY,_rotation * -RXMath.DTOR);
+		Vector2 secondVector = tempMatrix.GetNewTransformedVector(new Vector2(-localPoint.x,-localPoint.y));
+		
+		_x += secondVector.x-firstVector.x;
+		_y += secondVector.y-firstVector.y;
+		
+		_isMatrixDirty = true;
+	}
+	
+	//use node.LocalToLocal to use a point from a different coordinate space
+	public void RotateAroundPointAbsolute(Vector2 localPoint, float absoluteDegrees)
+	{
+		RotateAroundPointRelative(localPoint, absoluteDegrees - _rotation);
+	}
+	
+	//use node.LocalToLocal to use a point from a different coordinate space
+	public void ScaleAroundPointRelative(Vector2 localPoint, float relativeScaleX, float relativeScaleY)
+	{
+		FMatrix tempMatrix = FMatrix.tempMatrix;
+		
+		tempMatrix.ResetToIdentity();
+		tempMatrix.SetScaleThenRotate(0, 0,(relativeScaleX-1.0f),(relativeScaleY-1.0f),_rotation * -RXMath.DTOR);
+		Vector2 moveVector = tempMatrix.GetNewTransformedVector(new Vector2(localPoint.x*_scaleX,localPoint.y*_scaleY));	
 
+		_x += -moveVector.x;
+		_y += -moveVector.y;
+
+		_scaleX *= relativeScaleX;
+		_scaleY *= relativeScaleY;
+		
+		_isMatrixDirty = true;
+	}
+	
+	//use node.LocalToLocal to use a point from a different coordinate space
+	public void ScaleAroundPointAbsolute(Vector2 localPoint, float absoluteScaleX, float absoluteScaleY)
+	{
+		ScaleAroundPointRelative(localPoint, absoluteScaleX/_scaleX, absoluteScaleX/_scaleY);
+	}
+	
+	//for convenience
+	public void SetPosition(float newX, float newY)
+	{
+		this.x = newX;
+		this.y = newY;
+	}
+	
+	public void SetPosition(Vector2 newPosition)
+	{
+		this.x = newPosition.x;
+		this.y = newPosition.y;
+	}
+	
+	public Vector2 GetPosition()
+	{
+		return new Vector2(_x,_y);	
+	}
+}

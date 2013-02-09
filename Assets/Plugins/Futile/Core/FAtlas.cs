@@ -8,7 +8,6 @@ public class FAtlasElement
 	public string name;
 	
 	public int indexInAtlas;
-	public int indexInManager;
 
 	public FAtlas atlas;
 	public int atlasIndex;
@@ -22,7 +21,7 @@ public class FAtlasElement
 	public Rect sourceRect;
 	public Vector2 sourceSize;
 	public bool isTrimmed;
-	public bool isRotated;
+	//public bool isRotated;
 	
 	public FAtlasElement Clone()
 	{
@@ -31,7 +30,6 @@ public class FAtlasElement
 		element.name = name;
 		
 		element.indexInAtlas = indexInAtlas;
-		element.indexInManager = indexInManager;
 		
 		element.atlas = atlas;
 		element.atlasIndex = atlasIndex;
@@ -45,7 +43,6 @@ public class FAtlasElement
 		element.sourceRect = sourceRect;
 		element.sourceSize = sourceSize;
 		element.isTrimmed = isTrimmed;
-		element.isRotated = isRotated;
 		
 		return element;
 	}
@@ -67,6 +64,36 @@ public class FAtlas
 	private Vector2 _textureSize;
 	
 	private bool _isSingleImage;
+	
+	private bool _isTextureAnAsset = false;
+	
+	//TODO: allow users to pass a dictionary of pre-built atlas data if they want
+	public FAtlas (string name, Texture texture, int index) //single image
+	{
+		_name = name;
+		_imagePath = "";
+		_dataPath = "";
+		_index = index;
+		
+		_texture = texture;
+		_textureSize = new Vector2(_texture.width,_texture.height);
+		
+		CreateAtlasFromSingleImage();
+	}
+	
+	public FAtlas (string name, string dataPath, Texture texture, int index) //atlas with data path
+	{
+		_name = name;
+		_imagePath = "";
+		_dataPath = dataPath;
+		_index = index;
+		
+		_texture = texture;
+		_textureSize = new Vector2(_texture.width,_texture.height);
+		
+		_isSingleImage = false;
+		LoadAtlasData();
+	}
 	
 	public FAtlas (string name, string imagePath, string dataPath, int index, bool shouldLoadAsSingleImage)
 	{
@@ -94,13 +121,12 @@ public class FAtlas
 	{
 		_texture = (Texture) Resources.Load (_imagePath, typeof(Texture));
 		 
-		if(!_texture)
+		if(_texture == null)
 		{
-			Debug.Log("Futile: Couldn't load atlas at resolution level. Trying without suffix.");
-			_imagePath = _imagePath.TrimEnd(Futile.resourceSuffix.ToCharArray());
-			_texture = (Texture) Resources.Load (_imagePath, typeof(Texture));
-			if (!_texture) Debug.Log ("Futile: Couldn't load the atlas texture from: " + _imagePath);
+			throw new FutileException("Couldn't load the atlas texture from: " + _imagePath);	
 		}
+		
+		_isTextureAnAsset = true;
 		
 		_textureSize = new Vector2(_texture.width,_texture.height);
 	}
@@ -108,16 +134,18 @@ public class FAtlas
 	private void LoadAtlasData()
 	{
 		TextAsset dataAsset = (TextAsset) Resources.Load (_dataPath, typeof(TextAsset));
-				
-		if(!dataAsset)
+		
+		if(dataAsset == null)
 		{
-			Debug.Log("Futile: Couldn't load atlas data at resolution level. Trying without suffix.");
-			_dataPath = _dataPath.TrimEnd(Futile.resourceSuffix.ToCharArray());
-			dataAsset = (TextAsset) Resources.Load (_dataPath, typeof(TextAsset));
-			if (!dataAsset) Debug.Log ("Futile: Couldn't load the atlas data from: " + _dataPath);
+			throw new FutileException("Couldn't load the atlas data from: " + _dataPath);
 		}
 		
 		Dictionary<string,object> dict = dataAsset.text.dictionaryFromJson();
+		
+		if(dict == null)
+		{
+			throw new FutileException("The atlas at " + _dataPath + " was not a proper JSON file. Make sure to select \"Unity3D\" in TexturePacker.");
+		}
 		
 		Dictionary<string,object> frames = (Dictionary<string,object>) dict["frames"];
 		
@@ -147,12 +175,25 @@ public class FAtlas
 			FAtlasElement element = new FAtlasElement();
 			 
 			element.indexInAtlas = index++;
-			element.name = (string) item.Key;
+			
+			string name = (string) item.Key;
+			
+			if(Futile.shouldRemoveAtlasElementFileExtensions)
+			{
+				int extensionPosition = name.LastIndexOf(".");
+				if (extensionPosition >= 0) name = name.Substring(0, extensionPosition);
+			}
+
+			element.name = name;
 			
 			IDictionary itemDict = (IDictionary)item.Value;
 			
 			element.isTrimmed = (bool)itemDict["trimmed"];
-			element.isRotated = (bool)itemDict["rotated"];			
+			
+			if((bool)itemDict["rotated"]) 
+			{
+				throw new NotSupportedException("Futile no longer supports TexturePacker's \"rotated\" flag. Please disable it when creating the "+_dataPath+" atlas.");
+			}
 			
 			IDictionary frame = (IDictionary)itemDict["frame"];
 			
@@ -161,42 +202,21 @@ public class FAtlas
 			float rectW = float.Parse(frame["w"].ToString());
 			float rectH = float.Parse(frame["h"].ToString()); 
 			
-			Rect uvRect; 
+			Rect uvRect = new Rect
+			(
+				rectX/_textureSize.x + uvOffsetX,
+				((_textureSize.y - rectY - rectH)/_textureSize.y)+uvOffsetY,
+				rectW/_textureSize.x,
+				rectH/_textureSize.y
+			);
 				
-			if(element.isRotated)
-			{
-				uvRect = new Rect
-				(
-					rectX/_textureSize.x + uvOffsetY,
-					((_textureSize.y - rectY - rectW)/_textureSize.y)-uvOffsetX,
-					rectH/_textureSize.x,
-					rectW/_textureSize.y
-				);
-				
-				element.uvRect = uvRect;
+			element.uvRect = uvRect;
+		
+			element.uvTopLeft.Set(uvRect.xMin,uvRect.yMax);
+			element.uvTopRight.Set(uvRect.xMax,uvRect.yMax);
+			element.uvBottomRight.Set(uvRect.xMax,uvRect.yMin);
+			element.uvBottomLeft.Set(uvRect.xMin,uvRect.yMin);
 			
-				element.uvBottomLeft.Set(uvRect.xMin,uvRect.yMax);
-				element.uvTopLeft.Set(uvRect.xMax,uvRect.yMax);
-				element.uvTopRight.Set(uvRect.xMax,uvRect.yMin);
-				element.uvBottomRight.Set(uvRect.xMin,uvRect.yMin);
-			}
-			else 
-			{
-				uvRect = new Rect
-				(
-					rectX/_textureSize.x + uvOffsetX,
-					((_textureSize.y - rectY - rectH)/_textureSize.y)+uvOffsetY,
-					rectW/_textureSize.x,
-					rectH/_textureSize.y
-				);
-				
-				element.uvRect = uvRect;
-			
-				element.uvTopLeft.Set(uvRect.xMin,uvRect.yMax);
-				element.uvTopRight.Set(uvRect.xMax,uvRect.yMax);
-				element.uvBottomRight.Set(uvRect.xMax,uvRect.yMin);
-				element.uvBottomLeft.Set(uvRect.xMin,uvRect.yMin);
-			}
 			
 			IDictionary sourceRect = (IDictionary)itemDict["spriteSourceSize"];
 
@@ -256,7 +276,6 @@ public class FAtlas
 		
 		element.sourceSize = new Vector2(_textureSize.x*scaleInverse,_textureSize.y*scaleInverse);
 		element.isTrimmed = false;
-		element.isRotated = false;
 		
 		_elements.Add (element);
 		_elementsByName.Add (element.name, element);
@@ -264,7 +283,10 @@ public class FAtlas
 
 	public void Unload ()
 	{
-		Resources.UnloadAsset(_texture);
+		if(_isTextureAnAsset)
+		{
+			Resources.UnloadAsset(_texture);
+		}
 	}
 	
 	public List<FAtlasElement> elements

@@ -1,30 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data version="1.0">
     <struct type="Settings">
+        <key>fileFormatVersion</key>
+        <int>1</int>
         <key>variation</key>
         <string>main</string>
         <key>verbose</key>
         <false/>
         <key>autoSDSettings</key>
-        <array>
-            <struct type="AutoSDSettings">
-                <key>scale</key>
-                <double>0.5</double>
-                <key>extension</key>
-                <string>.</string>
-                <key>acceptFractionalValues</key>
-                <false/>
-                <key>maxTextureSize</key>
-                <QSize>
-                    <key>width</key>
-                    <int>2048</int>
-                    <key>height</key>
-                    <int>2048</int>
-                </QSize>
-            </struct>
-        </array>
+        <array/>
         <key>allowRotation</key>
-        <true/>
+        <false/>
         <key>quiet</key>
         <false/>
         <key>premultiplyAlpha</key>
@@ -33,12 +19,10 @@
         <false/>
         <key>dpi</key>
         <uint>72</uint>
-        <key>allowFreeSize</key>
-        <false/>
         <key>dataFormat</key>
         <string>unity</string>
         <key>textureFileName</key>
-        <filename>../../Assets/Resources/Atlases/CompartmentsSheet-hd.png</filename>
+        <filename>../../Assets/Resources/Atlases/CompartmentsSheet.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -89,6 +73,12 @@
             <enum type="AlgorithmSettings::AlgorithmId">MaxRects</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
+            <key>sizeConstraints</key>
+            <enum type="AlgorithmSettings::SizeConstraints">POT</enum>
+            <key>forceSquared</key>
+            <false/>
+            <key>forceWordAligned</key>
+            <false/>
             <key>maxRects</key>
             <struct type="AlgorithmMaxRectsSettings">
                 <key>heuristic</key>
@@ -121,9 +111,9 @@
             <enum type="AndEngine::MagFilter">MagLinear</enum>
         </struct>
         <key>dataFileName</key>
-        <filename>../../Assets/Resources/Atlases/CompartmentsSheet-hd.txt</filename>
+        <filename>../../Assets/Resources/Atlases/CompartmentsSheet.txt</filename>
         <key>mainExtension</key>
-        <string>-hd.</string>
+        <string></string>
         <key>forceIdenticalLayout</key>
         <false/>
         <key>outputFormat</key>
@@ -138,16 +128,14 @@
             <double>1</double>
             <key>scaleMode</key>
             <enum type="ScaleMode">Smooth</enum>
-            <key>crop</key>
-            <false/>
             <key>innerPadding</key>
             <uint>0</uint>
             <key>extrude</key>
             <uint>0</uint>
             <key>trimThreshold</key>
             <uint>1</uint>
-            <key>trim</key>
-            <true/>
+            <key>trimMode</key>
+            <enum type="SpriteSettings::TrimMode">Trim</enum>
             <key>heuristicMask</key>
             <false/>
         </struct>

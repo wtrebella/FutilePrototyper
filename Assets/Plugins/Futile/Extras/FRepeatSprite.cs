@@ -27,11 +27,11 @@ public class FRepeatSprite : FSprite
 		_scrollX = scrollX;
 		_scrollY = scrollY;
 		
-		Init(Futile.atlasManager.GetElementWithName(elementName),1);
+		Init(FFacetType.Quad, Futile.atlasManager.GetElementWithName(elementName),1);
 		
 		if(!_element.atlas.isSingleImage)
 		{
-			throw new Exception("ScrollingSprite must be used with a single image, not an atlas! Use Futile.atlasManager.LoadImage()");
+			throw new FutileException("ScrollingSprite must be used with a single image, not an atlas! Use Futile.atlasManager.LoadImage()");
 		}	
 		
 		_isAlphaDirty = true;
@@ -46,7 +46,7 @@ public class FRepeatSprite : FSprite
 		_textureHeight = _element.atlas.textureSize.y * Futile.resourceScaleInverse;
 	}
 	
-	override protected void UpdateLocalVertices()
+	override public void UpdateLocalVertices()
 	{
 		_areLocalVerticesDirty = false;
 		
@@ -67,11 +67,11 @@ public class FRepeatSprite : FSprite
 	
 	override public void PopulateRenderLayer()
 	{
-		if(_isOnStage && _firstQuadIndex != -1) 
+		if(_isOnStage && _firstFacetIndex != -1) 
 		{
 			_isMeshDirty = false;
 			
-			int vertexIndex0 = _firstQuadIndex*4;
+			int vertexIndex0 = _firstFacetIndex*4;
 			int vertexIndex1 = vertexIndex0 + 1;
 			int vertexIndex2 = vertexIndex0 + 2;
 			int vertexIndex3 = vertexIndex0 + 3;
