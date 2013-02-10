@@ -5,3 +5,9 @@ obj
 # mstest test results
 TestResults
 *.asset
+
+Library/
+Temp/
+ProjectSettings/
+
+*.DS_Store
