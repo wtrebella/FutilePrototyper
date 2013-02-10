@@ -16,13 +16,29 @@
 	"spriteSourceSize": {"x":1,"y":1,"w":62,"h":62},
 	"sourceSize": {"w":64,"h":64}
 },
+"hexagon.psd":
+{
+	"frame": {"x":2,"y":340,"w":59,"h":51},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":7,"w":59,"h":51},
+	"sourceSize": {"w":65,"h":65}
+},
 "square.psd":
 {
-	"frame": {"x":2,"y":340,"w":50,"h":50},
+	"frame": {"x":2,"y":393,"w":50,"h":50},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
 	"sourceSize": {"w":50,"h":50}
+},
+"triangle.psd":
+{
+	"frame": {"x":2,"y":445,"w":14,"h":16},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":14,"y":12,"w":14,"h":16},
+	"sourceSize": {"w":40,"h":40}
 }},
 "meta": {
 	"app": "http://www.texturepacker.com",
@@ -31,6 +47,6 @@
 	"format": "RGBA8888",
 	"size": {"w":512,"h":512},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:4d5173c1a9dc2e09d1199f8ca5383f92$"
+	"smartupdate": "$TexturePacker:SmartUpdate:11ca764fd3aa6708e2cfe9236f40134f$"
 }
 }
