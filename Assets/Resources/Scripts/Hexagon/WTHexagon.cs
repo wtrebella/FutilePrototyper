@@ -1,27 +1,41 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class WTHexagon : FStage {
 	HexTriangle triangle;
 	float currentTriangleAngle;
-	
-	public WTHexagon() : base("") {
+	FContainer stageLayer = new FContainer();
+	FContainer playerLayer = new FContainer();
+	List<FNode> gameObjects = new List<FNode>();
+		
+	public WTHexagon() : base("") {		
 		HexBackground background = new HexBackground();
-		background.x = Futile.screen.halfWidth;
-		background.y = Futile.screen.halfHeight;
-		AddChild(background);
+		stageLayer.AddChild(background);
 		
 		HexCenterHexagon ch = new HexCenterHexagon("centerHexagon");
-		ch.x = Futile.screen.halfWidth;
-		ch.y = Futile.screen.halfHeight;
-		ch.SpriteComponents()[0].sprite.color = new Color(1.0f, 0.8f, 0.2f, 1.0f);
-		AddChild(ch);
+		stageLayer.AddChild(ch);
 		
 		triangle = new HexTriangle("triangle");
-		triangle.SpriteComponents()[0].sprite.color = new Color(1.0f, 0.2f, 0.8f, 1.0f);
-		AddChild(triangle);
+		playerLayer.AddChild(triangle);
+		gameObjects.Add(triangle);
+		
+		stageLayer.x = Futile.screen.halfWidth;
+		stageLayer.y = Futile.screen.halfHeight;
+		AddChild(stageLayer);
+		
+		playerLayer.x = Futile.screen.halfWidth;
+		playerLayer.y = Futile.screen.halfHeight;
+		AddChild(playerLayer);
 		
 		PlaceTriangleAtAngle(45);
+		
+		HexCrossBar crossBar = new HexCrossBar(30f);
+		crossBar.x = 100f * Mathf.Sin(30f * Mathf.Deg2Rad);
+		crossBar.y = 100f * Mathf.Cos(30f * Mathf.Deg2Rad);
+		crossBar.rotation = 30f;
+		crossBar.distanceFromBackgroundSliceOrigin = 100f;
+		stageLayer.AddChild(crossBar);
 	}
 	
 	override public void HandleAddedToStage() {
@@ -35,6 +49,9 @@ public class WTHexagon : FStage {
 	}
 
 	public void HandleUpdate () {
+		
+		//stageLayer.rotation += 100f * Time.fixedDeltaTime;
+		
 		float rotationSpeed = 350f;
 		
 		if (Input.GetKey(KeyCode.LeftArrow)) {
@@ -55,7 +72,7 @@ public class WTHexagon : FStage {
 		
 		float radius = 50f;
 		
-		triangle.x = radius * Mathf.Cos(angle * Mathf.Deg2Rad) + Futile.screen.halfWidth;
-		triangle.y = radius * Mathf.Sin(angle * Mathf.Deg2Rad) + Futile.screen.halfHeight;
+		triangle.x = radius * Mathf.Cos(angle * Mathf.Deg2Rad);
+		triangle.y = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
 	}
 }

@@ -24,6 +24,14 @@
 	"spriteSourceSize": {"x":3,"y":7,"w":59,"h":51},
 	"sourceSize": {"w":65,"h":65}
 },
+"innerHexagon.psd":
+{
+	"frame": {"x":2,"y":445,"w":57,"h":49},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":8,"w":57,"h":49},
+	"sourceSize": {"w":65,"h":65}
+},
 "square.psd":
 {
 	"frame": {"x":2,"y":393,"w":50,"h":50},
@@ -34,7 +42,7 @@
 },
 "triangle.psd":
 {
-	"frame": {"x":2,"y":445,"w":14,"h":16},
+	"frame": {"x":54,"y":393,"w":14,"h":16},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":14,"y":12,"w":14,"h":16},
@@ -47,6 +55,6 @@
 	"format": "RGBA8888",
 	"size": {"w":512,"h":512},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:11ca764fd3aa6708e2cfe9236f40134f$"
+	"smartupdate": "$TexturePacker:SmartUpdate:92d7d13969f1d51320ac2bee5538c7e4$"
 }
 }
