@@ -8,18 +8,9 @@ public class WTHexagon : FStage {
 	FContainer stageLayer = new FContainer();
 	FContainer playerLayer = new FContainer();
 	List<FNode> gameObjects = new List<FNode>();
-		
+	HexSliceEntity sliceEntity;
+	
 	public WTHexagon() : base("") {		
-		HexBackground background = new HexBackground();
-		stageLayer.AddChild(background);
-		
-		HexCenterHexagon ch = new HexCenterHexagon("centerHexagon");
-		stageLayer.AddChild(ch);
-		
-		triangle = new HexTriangle("triangle");
-		playerLayer.AddChild(triangle);
-		gameObjects.Add(triangle);
-		
 		stageLayer.x = Futile.screen.halfWidth;
 		stageLayer.y = Futile.screen.halfHeight;
 		AddChild(stageLayer);
@@ -28,14 +19,21 @@ public class WTHexagon : FStage {
 		playerLayer.y = Futile.screen.halfHeight;
 		AddChild(playerLayer);
 		
-		PlaceTriangleAtAngle(45);
+		//HexBackground background = new HexBackground();
+		//stageLayer.AddChild(background);
 		
-		HexCrossBar crossBar = new HexCrossBar(30f);
-		crossBar.x = 100f * Mathf.Sin(30f * Mathf.Deg2Rad);
-		crossBar.y = 100f * Mathf.Cos(30f * Mathf.Deg2Rad);
-		crossBar.rotation = 30f;
-		crossBar.distanceFromBackgroundSliceOrigin = 100f;
-		stageLayer.AddChild(crossBar);
+		sliceEntity = new HexSliceEntity("sliceEntity", new Color(0.3f, 0.3f, 0.3f, 1.0f));
+		stageLayer.AddChild(sliceEntity);
+		
+		HexCenterHexagon ch = new HexCenterHexagon("centerHexagon");
+		stageLayer.AddChild(ch);
+		
+		triangle = new HexTriangle("triangle");
+		playerLayer.AddChild(triangle);
+		
+		gameObjects.Add(triangle);
+		
+		PlaceTriangleAtAngle(45);
 	}
 	
 	override public void HandleAddedToStage() {
@@ -49,8 +47,9 @@ public class WTHexagon : FStage {
 	}
 
 	public void HandleUpdate () {
-		
 		//stageLayer.rotation += 100f * Time.fixedDeltaTime;
+		
+		sliceEntity.MoveDownObstacles(100f);
 		
 		float rotationSpeed = 350f;
 		

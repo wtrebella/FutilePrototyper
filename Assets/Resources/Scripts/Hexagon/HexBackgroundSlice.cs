@@ -36,9 +36,7 @@ public class HexBackgroundSlice : FSprite {
 			shapeVertices[0] = new Vector2(0, 0);
 			shapeVertices[1] = new Vector2(height_, -baseWidth_ / 2f);
 			shapeVertices[2] = new Vector2(height_, baseWidth_ / 2f);
-			
-			float uvWidth = (_element.uvTopRight.x - _element.uvTopLeft.x);
-			
+						
 			triangleUVVertices[0] = new Vector2(_element.uvBottomLeft.x, _element.uvBottomRight.y);
 			triangleUVVertices[1] = new Vector2(_element.uvTopRight.x, _element.uvTopRight.y);
 			triangleUVVertices[2] = new Vector2(_element.uvTopLeft.x, _element.uvTopLeft.y);

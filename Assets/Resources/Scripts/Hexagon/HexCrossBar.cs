@@ -2,13 +2,13 @@ using UnityEngine;
 using System.Collections;
 
 public class HexCrossBar : FSprite {
-	float height_;
+	public float crossBarHeight;
 	float smallerBaseWidth_;
 	float largerBaseWidth_;
 	float distanceFromBackgroundSliceOrigin_ = 0;
 	
 	public HexCrossBar(float height) : base() {
-		height_ = height;
+		this.crossBarHeight = height;
 		
 		Init(FFacetType.Triangle, Futile.atlasManager.GetElementWithName("Futile_White"),3);
 		
@@ -22,7 +22,7 @@ public class HexCrossBar : FSprite {
 			distanceFromBackgroundSliceOrigin_ = value;
 			if (distanceFromBackgroundSliceOrigin_ < 0) distanceFromBackgroundSliceOrigin_ = 0;
 			smallerBaseWidth_ = Mathf.Tan(60f / 2f * Mathf.Deg2Rad) * distanceFromBackgroundSliceOrigin_ * 2f;
-			largerBaseWidth_ = smallerBaseWidth_ + Mathf.Tan(60f / 2f * Mathf.Deg2Rad) * height_ * 2f;
+			largerBaseWidth_ = smallerBaseWidth_ + Mathf.Tan(60f / 2f * Mathf.Deg2Rad) * crossBarHeight * 2f;
 			_isMeshDirty = true;
 		}
 	}
@@ -47,11 +47,11 @@ public class HexCrossBar : FSprite {
 			
 			Color[] colors = _renderLayer.colors;
 			
-			shapeVertices[0] = new Vector2(0, height_);
+			shapeVertices[0] = new Vector2(0, crossBarHeight);
 			shapeVertices[1] = new Vector2(inset, 0);
-			shapeVertices[2] = new Vector2(largerBaseWidth_ / 2f, height_);
+			shapeVertices[2] = new Vector2(largerBaseWidth_ / 2f, crossBarHeight);
 			shapeVertices[3] = new Vector2(inset + smallerBaseWidth_, 0);
-			shapeVertices[4] = new Vector2(largerBaseWidth_, height_);
+			shapeVertices[4] = new Vector2(largerBaseWidth_, crossBarHeight);
 			
 			for (int i = 0; i < 5; i++) {
 				shapeVertices[i].x -= largerBaseWidth_ / 2f;
