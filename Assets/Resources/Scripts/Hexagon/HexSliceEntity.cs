@@ -20,14 +20,17 @@ public class HexSliceEntity : WTEntity {
 		WTSpriteComponent crossBarComponent = new WTSpriteComponent("crossBarComponent", hcb);
 		obstacleComponents.Add(crossBarComponent);
 		AddComponent(crossBarComponent);
-	}		
+	}
 
 	public void MoveDownObstacles(float velocity) {
 		foreach (WTSpriteComponent obstacleComponent in obstacleComponents) {
 			HexCrossBar hcb = (HexCrossBar)obstacleComponent.sprite;
 			hcb.y -= velocity * Time.fixedDeltaTime;
 			hcb.distanceFromBackgroundSliceOrigin = hcb.y;
-			hcb.crossBarHeight = Mathf.Min(hcb.crossBarHeight, hcb.distanceFromBackgroundSliceOrigin);
+			if (hcb.y < 0) {
+				hcb.y = 0;
+				hcb.crossBarHeight -= velocity * Time.fixedDeltaTime;
+			}
 		}
 	}
 }

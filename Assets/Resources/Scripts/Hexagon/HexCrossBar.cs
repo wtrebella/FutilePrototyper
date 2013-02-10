@@ -2,13 +2,16 @@ using UnityEngine;
 using System.Collections;
 
 public class HexCrossBar : FSprite {
-	public float crossBarHeight;
+	float crossBarHeight_;
+	public float originalHeight;
 	float smallerBaseWidth_;
 	float largerBaseWidth_;
 	float distanceFromBackgroundSliceOrigin_ = 0;
+	float yOffset_ = 0;
 	
 	public HexCrossBar(float height) : base() {
 		this.crossBarHeight = height;
+		this.originalHeight = height;
 		
 		Init(FFacetType.Triangle, Futile.atlasManager.GetElementWithName("Futile_White"),3);
 		
@@ -22,7 +25,7 @@ public class HexCrossBar : FSprite {
 			distanceFromBackgroundSliceOrigin_ = value;
 			if (distanceFromBackgroundSliceOrigin_ < 0) distanceFromBackgroundSliceOrigin_ = 0;
 			smallerBaseWidth_ = Mathf.Tan(60f / 2f * Mathf.Deg2Rad) * distanceFromBackgroundSliceOrigin_ * 2f;
-			largerBaseWidth_ = smallerBaseWidth_ + Mathf.Tan(60f / 2f * Mathf.Deg2Rad) * crossBarHeight * 2f;
+			largerBaseWidth_ = smallerBaseWidth_ + Mathf.Tan(60f / 2f * Mathf.Deg2Rad) * crossBarHeight_ * 2f;
 			_isMeshDirty = true;
 		}
 	}
@@ -47,11 +50,11 @@ public class HexCrossBar : FSprite {
 			
 			Color[] colors = _renderLayer.colors;
 			
-			shapeVertices[0] = new Vector2(0, crossBarHeight);
+			shapeVertices[0] = new Vector2(0, crossBarHeight_);
 			shapeVertices[1] = new Vector2(inset, 0);
-			shapeVertices[2] = new Vector2(largerBaseWidth_ / 2f, crossBarHeight);
+			shapeVertices[2] = new Vector2(largerBaseWidth_ / 2f, crossBarHeight_);
 			shapeVertices[3] = new Vector2(inset + smallerBaseWidth_, 0);
-			shapeVertices[4] = new Vector2(largerBaseWidth_, crossBarHeight);
+			shapeVertices[4] = new Vector2(largerBaseWidth_, crossBarHeight_);
 			
 			for (int i = 0; i < 5; i++) {
 				shapeVertices[i].x -= largerBaseWidth_ / 2f;
@@ -94,6 +97,15 @@ public class HexCrossBar : FSprite {
 			triangleUVVertices[vertexIndex0 +  8] = textureUVVertices[4];
 						
 			_renderLayer.HandleVertsChange();
+		}
+	}
+	
+	public float crossBarHeight {
+		get {return crossBarHeight_;}
+		set {
+			crossBarHeight_ = value;
+			if (crossBarHeight_ < 0) crossBarHeight_ = 0;
+			_isMeshDirty = true;
 		}
 	}
 }

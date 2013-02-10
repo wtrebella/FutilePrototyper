@@ -8,7 +8,7 @@ public class WTHexagon : FStage {
 	FContainer stageLayer = new FContainer();
 	FContainer playerLayer = new FContainer();
 	List<FNode> gameObjects = new List<FNode>();
-	HexSliceEntity sliceEntity;
+	List<HexSliceEntity> sliceEntities = new List<HexSliceEntity>();
 	
 	public WTHexagon() : base("") {		
 		stageLayer.x = Futile.screen.halfWidth;
@@ -22,8 +22,21 @@ public class WTHexagon : FStage {
 		//HexBackground background = new HexBackground();
 		//stageLayer.AddChild(background);
 		
-		sliceEntity = new HexSliceEntity("sliceEntity", new Color(0.3f, 0.3f, 0.3f, 1.0f));
-		stageLayer.AddChild(sliceEntity);
+		Color color1 = new Color(0.3f, 0.3f, 0.3f, 1.0f);
+		Color color2 = new Color(0.33f, 0.33f, 0.33f, 1.0f);
+		bool isColor1 = true;
+		
+		for (int i = 0; i < 6; i++) {
+			Color actualColor;
+			if (isColor1) actualColor = color1;
+			else actualColor = color2;
+			
+			HexSliceEntity sliceEntity = new HexSliceEntity("sliceEntity", actualColor);
+			sliceEntity.rotation = i * 60;
+			sliceEntities.Add(sliceEntity);
+			stageLayer.AddChild(sliceEntity);
+			isColor1 = !isColor1;
+		}
 		
 		HexCenterHexagon ch = new HexCenterHexagon("centerHexagon");
 		stageLayer.AddChild(ch);
@@ -49,7 +62,7 @@ public class WTHexagon : FStage {
 	public void HandleUpdate () {
 		//stageLayer.rotation += 100f * Time.fixedDeltaTime;
 		
-		sliceEntity.MoveDownObstacles(100f);
+		foreach (HexSliceEntity hse in sliceEntities) hse.MoveDownObstacles(100f);
 		
 		float rotationSpeed = 350f;
 		
