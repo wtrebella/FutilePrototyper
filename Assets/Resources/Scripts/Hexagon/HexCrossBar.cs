@@ -7,7 +7,7 @@ public class HexCrossBar : FSprite {
 	float smallerBaseWidth_;
 	float largerBaseWidth_;
 	float distanceFromBackgroundSliceOrigin_ = 0;
-	float yOffset_ = 0;
+	public float previousDistanceFromBackgroundSliceOrigin = 10000;
 	
 	public HexCrossBar(float height) : base() {
 		this.crossBarHeight = height;
@@ -22,6 +22,7 @@ public class HexCrossBar : FSprite {
 	public float distanceFromBackgroundSliceOrigin {
 		get {return distanceFromBackgroundSliceOrigin_;}
 		set {
+			previousDistanceFromBackgroundSliceOrigin = distanceFromBackgroundSliceOrigin_;
 			distanceFromBackgroundSliceOrigin_ = value;
 			if (distanceFromBackgroundSliceOrigin_ < 0) distanceFromBackgroundSliceOrigin_ = 0;
 			smallerBaseWidth_ = Mathf.Tan(60f / 2f * Mathf.Deg2Rad) * distanceFromBackgroundSliceOrigin_ * 2f;

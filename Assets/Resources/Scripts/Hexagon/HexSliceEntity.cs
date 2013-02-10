@@ -6,7 +6,7 @@ public class HexSliceEntity : WTEntity {
 	static int crossBarNum = 0;
 	WTSpriteComponent backgroundSliceComponent;
 	
-	List<WTSpriteComponent> obstacleComponents = new List<WTSpriteComponent>();
+	public List<WTSpriteComponent> obstacleComponents = new List<WTSpriteComponent>();
 	
 	public HexSliceEntity(string name, Color backgroundColor) : base(name) {
 		HexBackgroundSlice hbs = new HexBackgroundSlice(60f, 700f);
