@@ -6,7 +6,6 @@ public class WTHexagon : FStage {
 	HexTriangle triangle;
 	float currentTriangleAngle;
 	FContainer stageLayer = new FContainer();
-	FContainer playerLayer = new FContainer();
 	List<FNode> gameObjects = new List<FNode>();
 	List<HexSliceEntity> sliceEntities = new List<HexSliceEntity>();
 	
@@ -14,13 +13,6 @@ public class WTHexagon : FStage {
 		stageLayer.x = Futile.screen.halfWidth;
 		stageLayer.y = Futile.screen.halfHeight;
 		AddChild(stageLayer);
-		
-		playerLayer.x = Futile.screen.halfWidth;
-		playerLayer.y = Futile.screen.halfHeight;
-		AddChild(playerLayer);
-		
-		//HexBackground background = new HexBackground();
-		//stageLayer.AddChild(background);
 		
 		Color color1 = new Color(0.3f, 0.3f, 0.3f, 1.0f);
 		Color color2 = new Color(0.33f, 0.33f, 0.33f, 1.0f);
@@ -42,7 +34,7 @@ public class WTHexagon : FStage {
 		stageLayer.AddChild(ch);
 		
 		triangle = new HexTriangle("triangle");
-		playerLayer.AddChild(triangle);
+		stageLayer.AddChild(triangle);
 		
 		gameObjects.Add(triangle);
 		
@@ -59,10 +51,32 @@ public class WTHexagon : FStage {
 		Futile.instance.SignalUpdate -= HandleUpdate;
 	}
 
+	float timer1 = 0.8f;
+	float timer2 = 0;
+	
 	public void HandleUpdate () {
-		//stageLayer.rotation += 100f * Time.fixedDeltaTime;
+		stageLayer.rotation += 100f * Time.fixedDeltaTime;
 		
-		foreach (HexSliceEntity hse in sliceEntities) hse.MoveDownObstacles(100f);
+		foreach (HexSliceEntity hse in sliceEntities) hse.MoveDownObstacles(300f);
+		
+		timer1 += Time.fixedDeltaTime;
+		timer2 += Time.fixedDeltaTime;
+		
+		Debug.Log("timer1: " + timer1 + " timer2: " + timer2);
+		
+		if (timer1 >= 1.6f) {
+			timer1 = 0;
+			sliceEntities[0].AddNewCrossbar(Random.Range(25f, 75f));
+			sliceEntities[2].AddNewCrossbar(Random.Range(25f, 75f));
+			sliceEntities[4].AddNewCrossbar(Random.Range(25f, 75f));
+		}
+		
+		if (timer2 >= 1.6f) {
+			timer2 = 0;
+			sliceEntities[1].AddNewCrossbar(Random.Range(25f, 75f));
+			sliceEntities[3].AddNewCrossbar(Random.Range(25f, 75f));
+			sliceEntities[5].AddNewCrossbar(Random.Range(25f, 75f));
+		}
 		
 		float rotationSpeed = 350f;
 		

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class HexSliceEntity : WTEntity {
+	static int crossBarNum = 0;
 	WTSpriteComponent backgroundSliceComponent;
 	
 	List<WTSpriteComponent> obstacleComponents = new List<WTSpriteComponent>();
@@ -13,16 +14,11 @@ public class HexSliceEntity : WTEntity {
 		hbs.color = backgroundColor;
 		backgroundSliceComponent = new WTSpriteComponent("backgroundSliceComponent", hbs);
 		AddComponent(backgroundSliceComponent);
-		
-		HexCrossBar hcb = new HexCrossBar(50f);
-		hcb.y = 700f;
-		hcb.distanceFromBackgroundSliceOrigin = 700f;
-		WTSpriteComponent crossBarComponent = new WTSpriteComponent("crossBarComponent", hcb);
-		obstacleComponents.Add(crossBarComponent);
-		AddComponent(crossBarComponent);
 	}
 
 	public void MoveDownObstacles(float velocity) {
+		List<WTSpriteComponent> obstaclesToRemove = new List<WTSpriteComponent>();
+		
 		foreach (WTSpriteComponent obstacleComponent in obstacleComponents) {
 			HexCrossBar hcb = (HexCrossBar)obstacleComponent.sprite;
 			hcb.y -= velocity * Time.fixedDeltaTime;
@@ -30,7 +26,25 @@ public class HexSliceEntity : WTEntity {
 			if (hcb.y < 0) {
 				hcb.y = 0;
 				hcb.crossBarHeight -= velocity * Time.fixedDeltaTime;
+				if (hcb.crossBarHeight == 0) {
+					obstaclesToRemove.Add(obstacleComponent);
+				}
 			}
 		}
+		
+		foreach (WTSpriteComponent obstacle in obstaclesToRemove) {
+			obstacleComponents.Remove(obstacle);
+			RemoveComponent(obstacle);		
+		}
+	}
+	
+	public void AddNewCrossbar(float height) {
+		HexCrossBar hcb = new HexCrossBar(height);
+		hcb.y = 700f;
+		hcb.distanceFromBackgroundSliceOrigin = 700f;
+		WTSpriteComponent crossBarComponent = new WTSpriteComponent(string.Format("crossBarComponent{0}", crossBarNum), hcb);
+		crossBarNum++;
+		obstacleComponents.Add(crossBarComponent);
+		AddComponent(crossBarComponent);
 	}
 }
